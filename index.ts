@@ -1,19 +1,18 @@
-import express from 'express';
+import express, { Application } from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 dotenv.config();
 
-const apiKey = process.env.API_KEY;
-const mongoIP = process.env.MONGO_IP;
-const mongoPort = process.env.MONGO_PORT;
-const app = express();
+const mongoIP: string = process.env.MONGO_IP || 'localhost';
+const mongoPort: string = process.env.MONGO_PORT || '27017';
+const app: Application = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -27,6 +26,11 @@ mongoose
   .then(() => {
     console.log('Connected to MongoDB');
   })
-  .catch(err => {
+  .catch((err: Error) => {
     console.error('MongoDB connection error:', err);
   });
+
+
+app.listen(3000, (): void => {
+  console.log("Server listening on 3000");
+});
