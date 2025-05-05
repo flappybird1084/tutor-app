@@ -1,4 +1,5 @@
-import express, { Application } from 'express';
+import express from 'express';
+//import { Express } from '@types/express';
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
@@ -12,7 +13,7 @@ dotenv.config();
 
 const mongoIP: string = process.env.MONGO_IP || 'localhost';
 const mongoPort: string = process.env.MONGO_PORT || '27017';
-const app: Application = express();
+const app: Express = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
