@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["es5", "es6", "dom", "dom.iterable", "es2018"],
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "./dist",
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "paths": {
+      "@server/*": ["./server/*"],
+      "@util/*": ["./util/*"]
+    },
+    "typeRoots": ["./server/types", "./node_modules/@types"]
+  },
+  "include": ["./server/**/*", "./util/**/*", "./client/**/*"],
+  "exclude": ["node_modules"]
+}
