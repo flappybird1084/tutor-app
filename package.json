@@ -1,12 +1,11 @@
 {
-  "type": "module",
   "name": "tutor-app",
   "version": "1.0.0",
   "description": "",
   "main": "server/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.ts",
+    "start": "ts-node server/index.ts",
     "dev": "nodemon server/index.ts",
     "format": "prettier --write ."
   },

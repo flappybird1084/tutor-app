@@ -6,7 +6,7 @@ import { dirname } from 'path';
 import mongoose from 'mongoose';
 import { authRouter } from './routes/auth';
 
-const __dirname = dirname(__filename);
+//const __dirname = dirname(__filename);
 
 dotenv.config();
 
