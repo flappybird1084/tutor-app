@@ -1,12 +1,13 @@
 import express, { Request, Response } from 'express';
-import dotenv from "dotenv";
-import { file } from "@server/util";
+import dotenv from 'dotenv';
+import { file } from '@server/util';
 
 export const authRouter = express.Router();
 
 // Render login form
 authRouter.get('/login', (req: Request, res: Response) => {
   res.render('login');
+  file;
 });
 
 // Handle login form submission
@@ -27,4 +28,3 @@ authRouter.post('/register', (req: Request, res: Response) => {
   // Add registration logic here
   res.send('Registration logic not implemented');
 });
-
