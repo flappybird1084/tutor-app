@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import mongoose from 'mongoose';
-//import { authRouter } from './routes/auth';
+import { authRouter } from './routes/auth';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,12 +18,13 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+console.log(__dirname, __filename);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
-//app.use("/auth", authRouter);
+app.use("/auth", authRouter);
 
 mongoose
   .connect(`mongodb://${mongoIP}:${mongoPort}/tutordb`, {})

@@ -1,21 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "lib": ["es5", "es6", "dom", "dom.iterable", "es2018"],
-    "baseUrl": ".",
-    "rootDir": ".",
-    "outDir": "./dist",
-    "downlevelIteration": true,
-    "esModuleInterop": true,
-    "strict": true,
+    "target": "esnext", // Keep as 'esnext' for the latest features
+    "module": "esnext", // Use 'esnext' for modern module resolution
+    "moduleResolution": "node", // Node module resolution
+    "lib": ["esnext", "dom"], // Use 'esnext' for all latest ECMAScript features
+    "baseUrl": ".", // Base directory for non-relative module names
+    "rootDir": ".", // Root directory of input files
+    "outDir": "./dist", // Output directory for compiled files
+    "downlevelIteration": true, // Support for down-level iteration
+    "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules
+    "strict":true, // Enable all strict type-checking options
     "paths": {
       "@server/*": ["./server/*"],
       "@util/*": ["./util/*"]
     },
-    "typeRoots": ["./server/types", "./node_modules/@types"]
+    "typeRoots": ["./server/types", "./node_modules/@types"], // Directories to search for type definitions
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true // Ensure consistent casing in file names
   },
-  "include": ["./server/**/*", "./util/**/*", "./client/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["./server/**/*", "./views/**/*"], // Include these directories
+  "exclude": ["node_modules" ] // Exclude node_modules and dist directories
 }
