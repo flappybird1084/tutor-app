@@ -6,7 +6,7 @@ export const authRouter = express.Router();
 
 // Render login form
 authRouter.get('/login', (req: Request, res: Response) => {
-  res.render('login');
+  res.render(file('views/login'));
   file;
 });
 
@@ -19,7 +19,7 @@ authRouter.post('/login', (req: Request, res: Response) => {
 
 // Render registration form
 authRouter.get('/register', (req: Request, res: Response) => {
-  res.render(file('register.ejs'));
+  res.render(file('views/register.ejs'));
 });
 
 // Handle registration form submission
