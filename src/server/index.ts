@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import mongoose from 'mongoose';
 import { authRouter } from './routes/auth';
+import { authAPIRouter } from './routes/api/auth-api';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,11 +21,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 console.log(__dirname, __filename);
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
-app.use("/auth", authRouter);
+
+
+app.use("/api/auth", authAPIRouter);
+app.use('/auth', authRouter);
+
 
 mongoose
   .connect(`mongodb://${mongoIP}:${mongoPort}/tutordb`, {})
@@ -35,7 +40,11 @@ mongoose
     console.error('MongoDB connection error:', err);
   });
 
-
+app.get('/', (req, res) => {
+  res.send(
+    'in vain have i struggled. it will not do. my feelings will not be repressed. you must allow me to tell you how ardently i admire and love you'
+  );
+});
 app.listen(3000, (): void => {
-  console.log("Server listening on 3000");
+  console.log('Server listening on 3000');
 });

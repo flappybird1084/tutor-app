@@ -7,17 +7,17 @@ export function file(...fragments: string[]) {
 }
 
 // promisify returns a function whose result is `unknown`
-const scrypt = promisify(_scrypt)
+const scrypt = promisify(_scrypt);
 
 export async function hashPassword(password: string) {
-  const salt = randomBytes(16).toString('hex')
+  const salt = randomBytes(16).toString('hex');
   // cast the unknown return value to Buffer
-  const derivedBuf = (await scrypt(password, salt, 64)) as Buffer
-  return salt + ':' + derivedBuf.toString('hex')
+  const derivedBuf = (await scrypt(password, salt, 64)) as Buffer;
+  return salt + ':' + derivedBuf.toString('hex');
 }
 
-export async function verifyPassword(password: string, stored: string) {
-  const [salt, key] = stored.split(':')
-  const derivedBuf = (await scrypt(password, salt, 64)) as Buffer
-  return derivedBuf.toString('hex') === key
+export async function verifyPassword(password: string, stored: any) {
+  const [salt, key] = stored.split(':');
+  const derivedBuf = (await scrypt(password, salt, 64)) as Buffer;
+  return derivedBuf.toString('hex') === key;
 }

@@ -6,8 +6,8 @@
   "main": "server/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsx server/index.ts",
-    "dev": "tsx watch server/index.ts",
+    "start": "tsx src/server/index.ts",
+    "dev": "tsx watch src/server/index.ts",
     "format": "prettier --write ."
   },
   "repository": {
@@ -26,6 +26,7 @@
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.14.1",
     "nodemon": "^3.1.10",
     "octokit": "^4.1.3",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
     "tsconfig-paths": "^4.2.0"
   }
 }
