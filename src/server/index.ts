@@ -24,7 +24,7 @@ console.log(__dirname, __filename);
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 
 app.use("/api/auth", authAPIRouter);
@@ -41,9 +41,7 @@ mongoose
   });
 
 app.get('/', (req, res) => {
-  res.send(
-    'in vain have i struggled. it will not do. my feelings will not be repressed. you must allow me to tell you how ardently i admire and love you'
-  );
+  res.render("index");
 });
 app.listen(3000, (): void => {
   console.log('Server listening on 3000');
