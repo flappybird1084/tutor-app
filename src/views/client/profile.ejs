@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<%- include('../header.ejs', { user: user }) %>
+<html>
+  <head>
+    <title>User Profile</title>
+  </head>
+  <body>
+    <h1>User Profile</h1>
+    <p>Welcome, <%= username %>!</p>
+    <p>Email: <%= email %></p>
+    <p>Role: <%= role %></p>
+  </body>
+</html>

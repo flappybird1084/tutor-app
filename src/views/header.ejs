@@ -1,111 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
 
-<head>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 20px;
-    }
+      div {
+        margin-top: 30px;
+      }
 
-    div {
-      margin-top: 30px;
-    }
+      h1 {
+        color: #333;
+      }
 
-    h1 {
-      color: #333;
-    }
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
 
-    a {
-      color: #007bff;
-      text-decoration: none;
-    }
+      a:hover {
+        text-decoration: underline;
+      }
 
-    a:hover {
-      text-decoration: underline;
-    }
+      div.header {
+        margin-top: 10px;
+        font-size: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    div.header {
-      margin-top: 10px;
-      font-size: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      .control {
+        display: flex;
+        gap: 20px;
+      }
 
-    .control {
-      display: flex;
-      gap: 20px;
-    }
+      .tooltip {
+        position: relative;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 5px;
+        margin-left: 145px;
+        z-index: 1000;
+      }
+    </style>
+    <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css" />
+  </head>
 
-    .tooltip {
-      position: relative;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      padding: 5px;
-      margin-left: 145px;
-      z-index: 1000;
-    }
-  </style>
-  <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
-</head>
-
-<body>
-  <div class="header">
-    <div class="left">
-      <a href="/">Home</a>
-    </div>
-    <div class="control">
-      <a href="/auth/login">Login</a>
-      <a href="/auth/register">Register</a>
-      <% if(user) { %>
-        <p id="logged-in-user" tabindex="0">Welcome, <%= user.username %>
-        </p>
+  <body>
+    <div class="header">
+      <div class="left">
+        <a href="/">Home</a>
+      </div>
+      <div class="control">
+        <a href="/auth/login">Login</a>
+        <a href="/auth/register">Register</a>
+        <% if(user) { %>
+        <p id="logged-in-user" tabindex="0">Welcome, <%= user.username %></p>
 
         <% } %>
-
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 
-<script>
-  const loggedinuser = document.getElementById('logged-in-user');
-  if (loggedinuser) {
-    loggedinuser.addEventListener("click", function (e) {
-      e.stopPropagation(); // Prevents event bubbling to body
+  <script>
+    const loggedinuser = document.getElementById('logged-in-user');
+    if (loggedinuser) {
+      loggedinuser.addEventListener('click', function (e) {
+        e.stopPropagation(); // Prevents event bubbling to body
 
-      // Remove existing tooltips
-      const existing = document.querySelectorAll('.tooltip');
-      existing.forEach(el => el.remove());
+        // Remove existing tooltips
+        const existing = document.querySelectorAll('.tooltip');
+        existing.forEach(el => el.remove());
 
-      const newDiv = document.createElement("div");
-      //profile not yet implemented
-      newDiv.innerHTML = `
+        const newDiv = document.createElement('div');
+        //profile not yet implemented
+        newDiv.innerHTML = `
       <a href="/profile">Profile</a><br>
       <a href="/auth/signout">Log out</a>`;
-      newDiv.style.position = "absolute";
-      newDiv.classList.add("tooltip");
+        newDiv.style.position = 'absolute';
+        newDiv.classList.add('tooltip');
 
-      const controlDiv = document.querySelector('.control');
-      controlDiv.appendChild(newDiv);
-    });
+        const controlDiv = document.querySelector('.control');
+        controlDiv.appendChild(newDiv);
+      });
 
-    document.body.addEventListener("click", function () {
+      document.body.addEventListener('click', function () {
         const tooltips = document.getElementsByClassName('tooltip');
         while (tooltips.length > 0) {
           tooltips[0].remove();
         }
-    });
+      });
 
-    // Prevent tooltip click from bubbling
-    document.addEventListener("click", function(e) {
-      if (e.target.closest('.tooltip')) {
-        e.stopPropagation();
-  }
-    }, true);
-  }
-</script>
-
+      // Prevent tooltip click from bubbling
+      document.addEventListener(
+        'click',
+        function (e) {
+          if (e.target.closest('.tooltip')) {
+            e.stopPropagation();
+          }
+        },
+        true
+      );
+    }
+  </script>
 </html>

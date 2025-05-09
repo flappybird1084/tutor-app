@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>Register</title>
-</head>
-
-<body>
-  <%- include('../header.ejs' ,{ user: user }) %>
-  <h1>Register</h1>
-  <form action="/api/auth/register" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required />
-    <br />
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required />
-    <br />
-    <label for="password">Email:</label>
-    <input type="test" id="email" name="email" required />
-    <br />
-    <button type="submit">Register</button>
-  </form>
-</body>
-
+  <body>
+    <%- include('../header.ejs' ,{ user: user }) %>
+    <h1>Register</h1>
+    <form action="/api/auth/register" method="POST">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required />
+      <br />
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+      <br />
+      <label for="password">Email:</label>
+      <input type="test" id="email" name="email" required />
+      <br />
+      <button type="submit">Register</button>
+    </form>
+    <% if (error) { %>
+    <p style="color: white; background-color: red">
+      There was an error registering. This is likely because an account with the
+      same username or email already exists.
+    </p>
+    <% } %>
+  </body>
 </html>
+<script>
+  const form = document.querySelector('form');
+  form.addEventListener('submit', event => {
+    setTimeout(() => {
+      window.location.href = '/auth/login';
+    }, 1000); // Delay of 1 second
+  });
+</script>

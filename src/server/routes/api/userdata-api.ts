@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 
 export const userdataAPIRouter = express.Router();
 
-userdataAPIRouter.get('/username', async (req: any, res:any) => {
+userdataAPIRouter.get('/username', async (req: any, res: any) => {
   try {
     // Check if the user is authenticated
     const reqUserPayload = req.user;

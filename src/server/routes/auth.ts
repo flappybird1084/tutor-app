@@ -14,11 +14,10 @@ authRouter.get('/login', (req: Request, res: Response) => {
   res.render('auth/login');
 });
 
-
 // GET  /register  → show the registration form
 authRouter.get('/register', (req: Request, res: Response) => {
-  res.render('auth/register');
-
+  const error = req.query.error === 'true';
+  res.render('auth/register', { error });
 });
 
 const signOutHandler: RequestHandler = (req, res) => {

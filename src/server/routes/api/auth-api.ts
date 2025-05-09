@@ -1,7 +1,18 @@
 // src/server/routes/auth.ts
-import express, { RequestHandler, Request, Response, NextFunction } from 'express';
+import express, {
+  RequestHandler,
+  Request,
+  Response,
+  NextFunction,
+} from 'express';
 import dotenv from 'dotenv';
-import jwt, { JwtPayload, JwtHeader, Secret, SignOptions, VerifyErrors } from 'jsonwebtoken';
+import jwt, {
+  JwtPayload,
+  JwtHeader,
+  Secret,
+  SignOptions,
+  VerifyErrors,
+} from 'jsonwebtoken';
 import { hashPassword, verifyPassword } from '@server/util';
 import { User } from '@server/schemas';
 import { UserPayload } from '@server/util';
@@ -9,8 +20,12 @@ import { UserPayload } from '@server/util';
 export const authAPIRouter = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET_KEY || '1';
 
-export const authMiddleware = (req: Request, _: Response, next: NextFunction) => {
-  const token = req.cookies.token ?? "";
+export const authMiddleware = (
+  req: Request,
+  _: Response,
+  next: NextFunction
+) => {
+  const token = req.cookies.token ?? '';
 
   jwt.verify(
     token,
@@ -19,11 +34,11 @@ export const authMiddleware = (req: Request, _: Response, next: NextFunction) =>
       if (decoded) {
         req.user = decoded as UserPayload;
       }
-    },
+    }
   );
 
-  console.log("token", token);
-  console.log("decoded user name", req.user?.username);
+  console.log('token', token);
+  console.log('decoded user name', req.user?.username);
   next();
 };
 
@@ -48,22 +63,16 @@ const loginHandler: any = async (req: Request, res: Response) => {
       username: user.username,
       role: user.role,
     };
-    const SECRET: Secret = process.env.JWT_SECRET_KEY!  // make sure .env has this
+    const SECRET: Secret = process.env.JWT_SECRET_KEY!; // make sure .env has this
 
     // 3) optional sign options
     const options: SignOptions = {
-      algorithm: 'HS256',        // defaults to HS256 if you leave this off
+      algorithm: 'HS256', // defaults to HS256 if you leave this off
       expiresIn: Number(process.env.JWT_EXPIRES_IN) || 3600,
-    }
-
-
+    };
 
     // Sign the token
-    const token: any = jwt.sign(
-      payload,
-      SECRET,
-      options,
-    );
+    const token: any = jwt.sign(payload, SECRET, options);
     // Optionally set it as a secure, httpOnly cookie
     res.cookie('token', token, {
       httpOnly: true,
@@ -77,14 +86,13 @@ const loginHandler: any = async (req: Request, res: Response) => {
     //   message: 'Login successful',
     //   token,
     // });
-    res.status(200).redirect("/");
+    res.status(200).redirect('/');
   } catch (err) {
     console.error('Error logging in:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
 authAPIRouter.post('/login', loginHandler);
-
 
 // POST /register  → create a new user
 const registerHandler: RequestHandler = async (req, res) => {
@@ -105,15 +113,7 @@ const registerHandler: RequestHandler = async (req, res) => {
     res.redirect('/auth/login');
   } catch (err) {
     console.error('Error creating account:', err);
-    res.status(500).redirect('/auth/register');
+    res.status(500).redirect('/auth/register?error=true');
   }
 };
 authAPIRouter.post('/register', registerHandler);
-
-const signOutHandler: RequestHandler = (req, res) => {
-  // Clear the JWT cookie
-  // res.clearCookie('token');
-  // Redirect to the main page
-  res.redirect('/');
-};
-authAPIRouter.get('/signout', signOutHandler);
