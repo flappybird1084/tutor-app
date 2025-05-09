@@ -17,7 +17,7 @@ adminRouter.get('/mainpage', async (req: Request, res: Response) => {
     res.render('admin/admin', { user: req.user, email, username, role });
   }
   else{
-    res.redirect('/login');
+    res.redirect('/auth/login');
   }
 });
 adminRouter.get('/users', async (req: Request, res: Response) => {
@@ -26,6 +26,6 @@ adminRouter.get('/users', async (req: Request, res: Response) => {
     res.render('admin/usermanagement', { users });
   }
   else{
-    res.redirect('/login');
+    res.redirect('/auth/login');
   }
 });
