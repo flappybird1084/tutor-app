@@ -8,6 +8,7 @@ import { authRouter } from './routes/auth';
 import { authAPIRouter, authMiddleware } from './routes/api/auth-api';
 import cookieParser from 'cookie-parser';
 import { clientRouter } from './routes/client';
+import { adminRouter } from './routes/admin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -40,6 +41,7 @@ app.use('/api/auth', authAPIRouter);
 app.use('/api/userdata', authAPIRouter);
 app.use('/auth', authRouter);
 app.use('/', clientRouter);
+app.use('/admin', adminRouter);
 
 mongoose
   .connect(`mongodb://${mongoIP}:${mongoPort}/tutordb`, {})
