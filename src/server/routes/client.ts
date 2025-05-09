@@ -17,6 +17,9 @@ clientRouter.get('/profile', async (req: Request, res: Response) => {
     const role = userObject?.role;
     res.render('client/profile', { user: req.user, email, username, role });
   }
+  else{
+    res.redirect('/login');
+  }
 });
 
 clientRouter.get("/profile/edit", async (req: Request, res: Response) => {
@@ -27,6 +30,9 @@ clientRouter.get("/profile/edit", async (req: Request, res: Response) => {
     const username = userObject?.username;
     const role = userObject?.role;
     res.render('client/profile-edit', { user: req.user, email, username, role });
+  }
+  else{
+    res.redirect('/login');
   }
 });
 
@@ -44,5 +50,18 @@ clientRouter.post("/profile/edit", async (req: Request, res: Response) => {
     res.redirect('/profile');
   } else {
     res.status(404).send('User not found');
+  }
+});
+clientRouter.get('/studentpage', async (req: Request, res: Response) => {
+  if (req.user) {
+    // console.log('User is authenticated:', req.user);
+    const userObject = await User.findById(req.user.sub);
+    const email = userObject?.email;
+    const username = userObject?.username;
+    const role = userObject?.role;
+    res.render('client/studentpage', { user: req.user, email, username, role });
+  }
+  else{
+    res.redirect('/login');
   }
 });

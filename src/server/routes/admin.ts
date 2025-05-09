@@ -16,4 +16,16 @@ adminRouter.get('/mainpage', async (req: Request, res: Response) => {
     const role = userObject?.role;
     res.render('admin/admin', { user: req.user, email, username, role });
   }
+  else{
+    res.redirect('/login');
+  }
+});
+adminRouter.get('/users', async (req: Request, res: Response) => {
+  if (req.user && req.user.role === 'admin') {
+    const users= await User.find();
+    res.render('admin/usermanagement', { users });
+  }
+  else{
+    res.redirect('/login');
+  }
 });
