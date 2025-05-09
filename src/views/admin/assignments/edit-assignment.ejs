@@ -1,0 +1,16 @@
+<%- include ('../../header.ejs') %>
+<h1>Edit Assignment</h1>
+<form action="/admin/assignments/edit/<%=assignment.id%>" method="post">
+  <label for="title">Title:</label>
+  <br />
+  <input type="text" id="title" name="title" />
+  <br />
+  <br />
+  <label for="description">Description:</label>
+  <br />
+  <textarea id="description" name="description"></textarea>
+  <br />
+  <br />
+
+  <input type="submit" value="Edit Assignment" />
+</form>

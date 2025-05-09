@@ -13,3 +13,21 @@ export const User = mongoose.model(
     },
   })
 );
+
+export const Assignment = mongoose.model(
+  'Assignment',
+  new Schema({
+    title: { type: String, unique: true },
+    description: String,
+    dueDate: Date,
+    status: {
+      type: String,
+      enum: ['pending', 'in-progress', 'completed'],
+      default: 'pending',
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  })
+);

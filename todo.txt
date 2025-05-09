@@ -1,7 +1,4 @@
-create sessions with logged in users displaying in header
-create admin interface
 
-Create login page
 
 Create user homepage
 

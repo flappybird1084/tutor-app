@@ -15,32 +15,41 @@ clientRouter.get('/profile', async (req: Request, res: Response) => {
     const email = userObject?.email;
     const username = userObject?.username;
     const role = userObject?.role;
-    let error="";
-    if(req.query.error === 'userOrEmailExists'){
-      error="userOrEmailExists";
-    } 
-    res.render('client/profile', { user: req.user, email, username, role, error });
-  }
-  else{
+    let error = '';
+    if (req.query.error === 'userOrEmailExists') {
+      error = 'userOrEmailExists';
+    }
+    res.render('client/profile', {
+      user: req.user,
+      email,
+      username,
+      role,
+      error,
+    });
+  } else {
     res.redirect('/auth/login');
   }
 });
 
-clientRouter.get("/profile/edit", async (req: Request, res: Response) => {
+clientRouter.get('/profile/edit', async (req: Request, res: Response) => {
   if (req.user) {
     // console.log('User is authenticated:', req.user);
     const userObject = await User.findById(req.user.sub);
     const email = userObject?.email;
     const username = userObject?.username;
     const role = userObject?.role;
-    res.render('client/profile-edit', { user: req.user, email, username, role });
-  }
-  else{
+    res.render('client/profile-edit', {
+      user: req.user,
+      email,
+      username,
+      role,
+    });
+  } else {
     res.redirect('/auth/login');
   }
 });
 
-clientRouter.post("/profile/edit", async (req: Request, res: Response) => {
+clientRouter.post('/profile/edit', async (req: Request, res: Response) => {
   const { email, username } = req.body;
 
   try {
@@ -52,13 +61,20 @@ clientRouter.post("/profile/edit", async (req: Request, res: Response) => {
 
       console.log(`about to update username: ${username}`);
       await userObject.save();
-      console.log('Username updated successfully', userObject.username, userObject.email);
+      console.log(
+        'Username updated successfully',
+        userObject.username,
+        userObject.email
+      );
       res.redirect('/profile');
     } else {
       res.status(404).send('User not found');
     }
   } catch (err: any) {
-    if (err.code === 11000 && (err.keyPattern?.username || err.keyPattern?.email)) {
+    if (
+      err.code === 11000 &&
+      (err.keyPattern?.username || err.keyPattern?.email)
+    ) {
       // Duplicate key error on username or email
       res.redirect('/profile?error=userOrEmailExists');
     } else {
@@ -75,8 +91,7 @@ clientRouter.get('/studentpage', async (req: Request, res: Response) => {
     const username = userObject?.username;
     const role = userObject?.role;
     res.render('client/studentpage', { user: req.user, email, username, role });
-  }
-  else{
+  } else {
     res.redirect('/auth/login');
   }
 });

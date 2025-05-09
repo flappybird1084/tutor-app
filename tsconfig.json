@@ -14,7 +14,7 @@
       "@server/*": ["./server/*"],
       "@util/*": ["./util/*"]
     },
-    "typeRoots": ["./server/types", "./node_modules/@types"], // Directories to search for type definitions
+    "typeRoots": ["./src/server/types", "./node_modules/@types"], // Directories to search for type definitions
     "skipLibCheck": true, // Skip type checking of declaration files
     "forceConsistentCasingInFileNames": true // Ensure consistent casing in file names
   },
