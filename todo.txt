@@ -1,5 +1,4 @@
-Create main page (before login)
-
+create sessions with logged in users displaying in header
 create admin interface
 
 Create login page

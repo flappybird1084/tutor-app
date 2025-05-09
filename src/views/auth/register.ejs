@@ -7,7 +7,7 @@
 </head>
 
 <body>
-  <%- include('../header.ejs') %>
+  <%- include('../header.ejs' ,{ user: user }) %>
   <h1>Register</h1>
   <form action="/api/auth/register" method="POST">
     <label for="username">Username:</label>

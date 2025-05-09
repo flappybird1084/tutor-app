@@ -21,3 +21,9 @@ export async function verifyPassword(password: string, stored: any) {
   const derivedBuf = (await scrypt(password, salt, 64)) as Buffer;
   return derivedBuf.toString('hex') === key;
 }
+
+export interface UserPayload {
+  sub: string;
+  username: string;
+  role: string;
+}

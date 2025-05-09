@@ -9,6 +9,7 @@
       margin: 0;
       padding: 20px;
     }
+
     div {
       margin-top: 30px;
     }
@@ -18,23 +19,93 @@
     }
 
     a {
+      color: #007bff;
       text-decoration: none;
-      color: #007BFF;
     }
 
     a:hover {
       text-decoration: underline;
+    }
+
+    div.header {
+      margin-top: 10px;
+      font-size: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .control {
+      display: flex;
+      gap: 20px;
+    }
+
+    .tooltip {
+      position: relative;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 5px;
+      margin-left: 145px;
+      z-index: 1000;
     }
   </style>
   <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
 </head>
 
 <body>
-  <div>
-    <a href="/">Home</a>
-    <a href="/auth/login">Login</a>
-    <a href="/auth/register">Register</a>
+  <div class="header">
+    <div class="left">
+      <a href="/">Home</a>
+    </div>
+    <div class="control">
+      <a href="/auth/login">Login</a>
+      <a href="/auth/register">Register</a>
+      <% if(user) { %>
+        <p id="logged-in-user" tabindex="0">Welcome, <%= user.username %>
+        </p>
+
+        <% } %>
+
+    </div>
   </div>
 </body>
+
+<script>
+  const loggedinuser = document.getElementById('logged-in-user');
+  if (loggedinuser) {
+    loggedinuser.addEventListener("click", function (e) {
+      e.stopPropagation(); // Prevents event bubbling to body
+      loggedinuser.style.color = "blue";
+
+      // Remove existing tooltips
+      const existing = document.querySelectorAll('.tooltip');
+      existing.forEach(el => el.remove());
+
+      const newDiv = document.createElement("div");
+      newDiv.innerHTML = `<p><%= user.username %></p>
+                          <p>Click here to view your profile</p>`;
+      newDiv.style.position = "absolute";
+      newDiv.classList.add("tooltip");
+
+      const controlDiv = document.querySelector('.control');
+      controlDiv.appendChild(newDiv);
+    });
+
+    document.body.addEventListener("click", function () {
+        loggedinuser.style.color = "black";
+        const tooltips = document.getElementsByClassName('tooltip');
+        while (tooltips.length > 0) {
+          tooltips[0].remove();
+        }
+    });
+
+    // Prevent tooltip click from bubbling
+    document.addEventListener("click", function(e) {
+      if (e.target.closest('.tooltip')) {
+        e.stopPropagation();
+  }
+    }, true);
+  }
+</script>
 
 </html>

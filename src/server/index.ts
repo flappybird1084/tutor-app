@@ -5,7 +5,8 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import mongoose from 'mongoose';
 import { authRouter } from './routes/auth';
-import { authAPIRouter } from './routes/api/auth-api';
+import { authAPIRouter, authMiddleware } from './routes/api/auth-api';
+import cookieParser from 'cookie-parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,11 +25,20 @@ console.log(__dirname, __filename);
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(cookieParser());
 
+app.use(express.static(path.join(__dirname, '../public')));
+app.use(authMiddleware);
+
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
 
 app.use("/api/auth", authAPIRouter);
+app.use("/api/userdata", authAPIRouter);
 app.use('/auth', authRouter);
+
 
 
 mongoose

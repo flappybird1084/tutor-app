@@ -18,6 +18,7 @@ authRouter.get('/login', (req: Request, res: Response) => {
 // GET  /register  → show the registration form
 authRouter.get('/register', (req: Request, res: Response) => {
   res.render('auth/register');
+
 });
 
 
