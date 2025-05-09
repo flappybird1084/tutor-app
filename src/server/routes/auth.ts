@@ -21,4 +21,10 @@ authRouter.get('/register', (req: Request, res: Response) => {
 
 });
 
-
+const signOutHandler: RequestHandler = (req, res) => {
+  // Clear the JWT cookie
+  res.clearCookie('token');
+  // Redirect to the main page
+  res.redirect('/');
+};
+authRouter.get('/signout', signOutHandler);

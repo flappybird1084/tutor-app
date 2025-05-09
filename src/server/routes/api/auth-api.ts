@@ -109,3 +109,11 @@ const registerHandler: RequestHandler = async (req, res) => {
   }
 };
 authAPIRouter.post('/register', registerHandler);
+
+const signOutHandler: RequestHandler = (req, res) => {
+  // Clear the JWT cookie
+  // res.clearCookie('token');
+  // Redirect to the main page
+  res.redirect('/');
+};
+authAPIRouter.get('/signout', signOutHandler);

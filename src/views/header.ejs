@@ -75,15 +75,16 @@
   if (loggedinuser) {
     loggedinuser.addEventListener("click", function (e) {
       e.stopPropagation(); // Prevents event bubbling to body
-      loggedinuser.style.color = "blue";
 
       // Remove existing tooltips
       const existing = document.querySelectorAll('.tooltip');
       existing.forEach(el => el.remove());
 
       const newDiv = document.createElement("div");
-      newDiv.innerHTML = `<p><%= user.username %></p>
-                          <p>Click here to view your profile</p>`;
+      //profile not yet implemented
+      newDiv.innerHTML = `
+      <a href="/profile">Profile</a><br>
+      <a href="/auth/signout">Log out</a>`;
       newDiv.style.position = "absolute";
       newDiv.classList.add("tooltip");
 
@@ -92,7 +93,6 @@
     });
 
     document.body.addEventListener("click", function () {
-        loggedinuser.style.color = "black";
         const tooltips = document.getElementsByClassName('tooltip');
         while (tooltips.length > 0) {
           tooltips[0].remove();
