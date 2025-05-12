@@ -19,6 +19,7 @@ export const Assignment = mongoose.model(
   new Schema({
     title: { type: String, unique: true },
     description: String,
+    githubLink: String,
     dueDate: Date,
     status: {
       type: String,

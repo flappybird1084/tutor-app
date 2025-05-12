@@ -11,6 +11,7 @@
       <th>ID</th>
       <th>Title</th>
       <th>Description</th>
+      <th>Github Link</th>
       <th>Due Date</th>
     </tr>
     <% assignments.forEach(assignment=> { %>
@@ -18,13 +19,38 @@
       <td>
         <a href="/admin/assignments/edit/<%= assignment._id %>">Edit</a>
         |
-        <a href="/admin/assignments/delete/<%= assignment._id %>">Delete</a>
+        <a href="#" onclick="deleteAssignment('<%= assignment._id %>')">
+          Delete
+        </a>
       </td>
       <td><%= assignment._id %></td>
       <td><%= assignment.title %></td>
       <td><%= assignment.description %></td>
+      <td>
+        <a href="<%= assignment.github_link %>"><%= assignment.githubLink %></a>
+      </td>
       <td><%= assignment.due_date %></td>
     </tr>
     <% }); %>
   </table>
 </div>
+<script>
+  function deleteAssignment(id) {
+    if (confirm('Are you sure you want to delete this assignment?')) {
+      fetch(`/admin/assignments/delete/${id}`, {
+        method: 'DELETE',
+      })
+        .then(response => {
+          if (response.ok) {
+            alert('Assignment deleted successfully.');
+            location.reload();
+          } else {
+            alert('Failed to delete assignment.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  }
+</script>
