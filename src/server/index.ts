@@ -9,6 +9,7 @@ import { authAPIRouter, authMiddleware } from './routes/api/auth-api';
 import cookieParser from 'cookie-parser';
 import { clientRouter } from './routes/client';
 import { adminRouter } from './routes/admin';
+import { gitbucketAPIRouter } from './routes/api/gitbucket-api';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,6 +38,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api/gitbucket', gitbucketAPIRouter);
 app.use('/api/auth', authAPIRouter);
 app.use('/api/userdata', authAPIRouter);
 app.use('/auth', authRouter);
