@@ -1,7 +1,7 @@
 // src/server/routes/auth.ts
 import express, { Request, response, Response } from 'express';
 import dotenv from 'dotenv';
-import { User } from '@server/schemas';
+import { User, Assignment } from '@server/schemas';
 
 export const clientRouter = express.Router();
 dotenv.config();
@@ -116,7 +116,11 @@ clientRouter.get('/studentpage', async (req: Request, res: Response) => {
     const email = userObject?.email;
     const username = userObject?.username;
     const role = userObject?.role;
-    res.render('client/studentpage', { user: req.user, email, username, role });
+    const assignments = await Assignment.find({
+      type: 'assigned',
+user: userObject,
+    });
+    res.render('client/studentpage', { user: req.user, email, username, role, assignments });
   } else {
     res.redirect('/auth/login');
   }

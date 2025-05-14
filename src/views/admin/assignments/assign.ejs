@@ -1,0 +1,64 @@
+<%- include('../../header.ejs') %>
+<div class="search-container">
+  <input
+    type="text"
+    id="searchInput"
+    name="q"
+    placeholder="Search assignments..."
+    hx-get="/admin/assignments/search/<%=toAssignUser._id %>"
+    hx-trigger="keyup changed delay:100ms"
+    hx-target="#search-results"
+    hx-swap="innerHTML"
+  />
+</div>
+<div id="search-results" style="margin-bottom: 30px"></div>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>GitHub Link</th>
+      <th>Action</th>
+      <th>Due Date</th>
+    </tr>
+  </thead>
+  <tbody id="assignment-results">
+    <% assignments.forEach((assignment) => { %>
+    <tr>
+      <td><%= assignment.title %></td>
+      <td><%= assignment.description %></td>
+      <td><%= assignment.githubLink %></td>
+      <td>
+        <a href="#"
+          hx-delete="/admin/assignments/delete/<%= assignment._id %>"
+          hx-trigger="click"
+          hx-on::after-request="window.location.reload();">Delete</a>
+        |
+        <a href="#" onclick="openInIframe('/admin/assignments/edit/<%= assignment._id %>'); return false;">Edit</a>
+
+      </td>
+      <td><%= assignment.dueDate %></td>
+    </tr>
+
+    <% }); %>
+  </tbody>
+</table>
+
+    <iframe id="editIframe" style="width: 100%; height: 600px; border: 1px solid #ccc; display: none;"></iframe>
+<script>
+  function openInIframe(url) {
+    const iframe = document.getElementById('editIframe');
+    iframe.src = url;
+    iframe.style.display = 'block';
+    iframe.scrollIntoView({ behavior: 'smooth' });
+  }
+  //close iframe when edit is done
+  window.addEventListener('message', (event) => {
+    if (event.data === 'close-iframe') {
+      const iframe = document.getElementById('editIframe');
+      iframe.style.display = 'none';
+      iframe.src = '';
+      window.location.reload();
+    }
+  });
+</script>

@@ -30,5 +30,9 @@ export const Assignment = mongoose.model(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    type: {
+      type: String,
+      enum: ['template', 'assigned'],
+    },
   })
 );
