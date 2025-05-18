@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { Octokit } from 'octokit';
 import express, { Request, Response } from 'express';
+import child_process, {spawn} from 'child_process';
 
 dotenv.config();
 
@@ -59,32 +60,41 @@ gitbucketAPIRouter.get(
   }
 );
 
-//not working :(
+
 gitbucketAPIRouter.post(
-  '/repos/clone/:templateowner/:templatename/:newowner',
+  '/repos/clone/:templateowner/:templatename/:newowner/:newname',
   async (req: Request, res: Response) => {
-    console.log(
-      'Cloning repository:',
-      req.params.templateowner,
-      req.params.templatename,
-      req.params.newowner
-    );
-    try {
-      const cloneResponse = await octokit.request(
-        'POST /repos/{template_owner}/{template_repo}/generate',
-        {
-          template_owner: req.params.templateowner,
-          template_repo: req.params.templatename,
-          owner: req.params.newowner,
-          name: req.params.templatename,
-          private: false,
-        }
-      );
-      res.json(cloneResponse.data);
-    } catch (err) {
-      console.error('Error cloning repository:', err);
-      res.status(500).json({ error: 'Failed to clone repository' });
+
+    const { templateowner, templatename, newowner, newname } = req.params;
+
+    // Optional basic validation: allow only alphanumeric, underscore, dash
+    const isSafe = /^[\w\-]+$/.test(templateowner + templatename + newowner + newname);
+    if (!isSafe) {
+      res.status(400).json({ error: 'Invalid repository name or owner. We suspect it may contain malicious shell content' });
+      return;
     }
+
+    const firstRepoURL = `${process.env.GITBUCKET_CLONE_URL}/${templateowner}/${templatename}.git`; 
+    const secondRepoURL = `${process.env.GITBUCKET_CLONE_URL}/${newowner}/${newname}.git`;
+    
+    const cloneProcess = spawn('bash', ['src/scripts/duplicate-repo.sh', firstRepoURL, secondRepoURL]);
+
+    cloneProcess.stdout.on('data', data => {
+      console.log(`stdout: ${data}`);
+    });
+
+    cloneProcess.stderr.on('data', data => {
+      console.error(`stderr: ${data}`);
+    });
+
+    cloneProcess.on('close', code => {
+      if (code !== 0) {
+        console.error(`Script exited with code ${code}`);
+        return res.status(500).send('Error cloning repository');
+      }
+      console.log('Repository cloned successfully!');
+      res.json({ message: 'Repository cloned successfully!' });
+    });
   }
 );
 
@@ -108,3 +118,4 @@ gitbucketAPIRouter.get(
     }
   }
 );
+
