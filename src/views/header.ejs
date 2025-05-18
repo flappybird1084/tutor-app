@@ -13,8 +13,14 @@
         margin-top: 30px;
       }
 
-      h1 {
+       h1 {
         color: #333;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        h1 {
+          color: white;
+        }
       }
 
       a {
@@ -37,23 +43,26 @@
       .control {
         display: flex;
         gap: 20px;
+        position: relative;
       }
 
       .tooltip {
         position: relative;
+        right: 0;
+        top: 100%;
         background-color: #fff;
         border: 1px solid #ccc;
         padding: 5px;
-        margin-left: 145px;
         z-index: 1000;
       }
+
       #logged-in-user {
         text-decoration: underline;
+        cursor: pointer;
       }
     </style>
     <link rel="stylesheet" href="/index.css" />
-    <title>Tutor App</title>
-    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
   </head>
 
   <body>
@@ -70,52 +79,28 @@
         <a href="/auth/login">Login</a>
         <a href="/auth/register">Register</a>
         <% if(user) { %>
-        <p id="logged-in-user" tabindex="0">Welcome, <%= user.username %></p>
-
+        <p
+          id="logged-in-user"
+          hx-get="/profile/tooltip"
+          hx-target="next .tooltip-container"
+          hx-swap="innerHTML"
+          hx-trigger="click"
+        >
+          Welcome, <%= user.username %>
+        </p>
+        <div class="tooltip-container"></div>
         <% } %>
       </div>
     </div>
-  </body>
 
-  <script>
-    const loggedinuser = document.getElementById('logged-in-user');
-    if (loggedinuser) {
-      loggedinuser.addEventListener('click', function (e) {
-        e.stopPropagation(); // Prevents event bubbling to body
-
-        // Remove existing tooltips
-        const existing = document.querySelectorAll('.tooltip');
-        existing.forEach(el => el.remove());
-
-        const newDiv = document.createElement('div');
-        //profile not yet implemented
-        newDiv.innerHTML = `
-      <a href="/profile">Profile</a><br>
-      <a href="/auth/signout">Log out</a>`;
-        newDiv.style.position = 'absolute';
-        newDiv.classList.add('tooltip');
-
-        const controlDiv = document.querySelector('.control');
-        controlDiv.appendChild(newDiv);
-      });
-
-      document.body.addEventListener('click', function () {
-        const tooltips = document.getElementsByClassName('tooltip');
-        while (tooltips.length > 0) {
-          tooltips[0].remove();
+    <script>
+      // Close tooltip when clicking anywhere else
+      document.body.addEventListener('click', function(e) {
+        if (!e.target.closest('#logged-in-user')) {
+          const tooltips = document.querySelectorAll('.tooltip-container');
+          tooltips.forEach(el => el.innerHTML = '');
         }
       });
-
-      // Prevent tooltip click from bubbling
-      document.addEventListener(
-        'click',
-        function (e) {
-          if (e.target.closest('.tooltip')) {
-            e.stopPropagation();
-          }
-        },
-        true
-      );
-    }
-  </script>
+    </script>
+  </body>
 </html>
