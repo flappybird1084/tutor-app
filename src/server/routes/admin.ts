@@ -87,7 +87,7 @@ adminRouter.post(
     assignment.githubLink = githubLink;
     await assignment.save();
     setTimeout(() => {
-    res.redirect('/admin/assignments');
+      res.redirect('/admin/assignments');
     }, 300);
   }
 );
@@ -121,18 +121,20 @@ adminRouter.get('/assign/:userId', async (req: Request, res: Response) => {
   res.render('admin/assignments/assign', { assignments, toAssignUser: user });
 });
 
-adminRouter.get('/assignments/search/:userId', async (req: Request, res: Response) => {
-  const searchTerm = req.query.q;
-  console.log('/assignments/search: found search term', searchTerm);
-  const assignments = await Assignment.find({
-    title: { $regex: searchTerm as string, $options: 'i' },
-    type: 'template',
-  });
-  console.log('/assignments/search: found assignments', assignments);
-  //convert json into divs for innerhtml replace
-  let html = '';
-  assignments.forEach(assignment => {
-    html += `
+adminRouter.get(
+  '/assignments/search/:userId',
+  async (req: Request, res: Response) => {
+    const searchTerm = req.query.q;
+    console.log('/assignments/search: found search term', searchTerm);
+    const assignments = await Assignment.find({
+      title: { $regex: searchTerm as string, $options: 'i' },
+      type: 'template',
+    });
+    console.log('/assignments/search: found assignments', assignments);
+    //convert json into divs for innerhtml replace
+    let html = '';
+    assignments.forEach(assignment => {
+      html += `
       <div class="assignment-card" style="border:2px solid black; margin-top:10px">
        <a
        hx-post="/admin/assignments/assign/${assignment._id}/${req.params.userId}"
@@ -141,37 +143,41 @@ adminRouter.get('/assignments/search/:userId', async (req: Request, res: Respons
        > Assign</a> | ${assignment.title} | ${assignment.description} | <a href="${assignment.githubLink}">GitHub</a> 
       </div>
     `;
-  });
-  res.send(html);
-});
-
-adminRouter.post('/assignments/assign/:assignmentId/:userId', async (req: Request, res: Response) => {
-  const assignmentId = req.params.assignmentId;
-  const userId = req.params.userId;
-  console.log('Assigning assignment:', assignmentId);
-  try {
-    const templateAssignment = await Assignment.findById(assignmentId);
-    if (!templateAssignment) {
-      res.status(404).send('Assignment not found');
-      return;
-    }
-    const user = await User.findById(userId);
-    if (!user) {
-      res.status(404).send('User not found');
-      return;
-    }
-    await Assignment.create({
-      title: templateAssignment.title + ' - assigned',
-      description: templateAssignment.description,
-      githubLink: templateAssignment.githubLink,
-      dueDate: templateAssignment.dueDate,
-      status: 'in-progress',
-      type: 'assigned',
-      user: user
     });
-    res.send('Assignment assigned successfully');
-  } catch (error) {
-    console.error('Error assigning assignment:', error);
-    res.status(500).send('Failed to assign assignment');
+    res.send(html);
   }
-});
+);
+
+adminRouter.post(
+  '/assignments/assign/:assignmentId/:userId',
+  async (req: Request, res: Response) => {
+    const assignmentId = req.params.assignmentId;
+    const userId = req.params.userId;
+    console.log('Assigning assignment:', assignmentId);
+    try {
+      const templateAssignment = await Assignment.findById(assignmentId);
+      if (!templateAssignment) {
+        res.status(404).send('Assignment not found');
+        return;
+      }
+      const user = await User.findById(userId);
+      if (!user) {
+        res.status(404).send('User not found');
+        return;
+      }
+      await Assignment.create({
+        title: templateAssignment.title + ' - assigned',
+        description: templateAssignment.description,
+        githubLink: templateAssignment.githubLink,
+        dueDate: templateAssignment.dueDate,
+        status: 'in-progress',
+        type: 'assigned',
+        user: user,
+      });
+      res.send('Assignment assigned successfully');
+    } catch (error) {
+      console.error('Error assigning assignment:', error);
+      res.status(500).send('Failed to assign assignment');
+    }
+  }
+);

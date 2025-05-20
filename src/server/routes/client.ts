@@ -118,9 +118,15 @@ clientRouter.get('/studentpage', async (req: Request, res: Response) => {
     const role = userObject?.role;
     const assignments = await Assignment.find({
       type: 'assigned',
-user: userObject,
+      user: userObject,
     });
-    res.render('client/studentpage', { user: req.user, email, username, role, assignments });
+    res.render('client/studentpage', {
+      user: req.user,
+      email,
+      username,
+      role,
+      assignments,
+    });
   } else {
     res.redirect('/auth/login');
   }

@@ -1,16 +1,16 @@
 <%- include('../header.ejs') %>
 <div class="container">
   <h1>Student Page</h1>
- <table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Date</th>
-      <th>Status</th>
-      <th>Link</th>
-    </tr>
-    <% assignments.forEach((assignment) => { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Link</th>
+      </tr>
+      <% assignments.forEach((assignment) => { %>
       <tr>
         <td><%= assignment.title %></td>
         <td><%= assignment.description %></td>
@@ -18,7 +18,7 @@
         <td><%= assignment.status %></td>
         <td><a href="<%= assignment.githubLink%>">Link</a></td>
       </tr>
-    <% }); %>
-  </thead>
- </table> 
+      <% }); %>
+    </thead>
+  </table>
 </div>

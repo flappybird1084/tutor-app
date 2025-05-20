@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import { isTemplateExpression } from 'typescript';
 
 export const User = mongoose.model(
   'User',
@@ -19,6 +20,7 @@ export const Assignment = mongoose.model(
   new Schema({
     title: { type: String, unique: true },
     description: String,
+    assignmentLink: String,
     githubLink: String,
     dueDate: Date,
     status: {

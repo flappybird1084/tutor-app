@@ -11,6 +11,7 @@
       <th>Title</th>
       <th>Description</th>
       <th>Github Link</th>
+      <th>Assignment Link</th>
       <th>Due Date</th>
       <th>Id</th>
     </tr>
@@ -27,6 +28,11 @@
       <td><%= assignment.description %></td>
       <td>
         <a href="<%= assignment.github_link %>"><%= assignment.githubLink %></a>
+      </td>
+      <td>
+        <a href="<%= assignment.assignment_link %>">
+          <%= assignment.assignmentLink %>
+        </a>
       </td>
       <td><%= assignment.due_date %></td>
       <td><%= assignment._id %></td>
