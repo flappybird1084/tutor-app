@@ -94,6 +94,7 @@
     </div>
 
     <script>
+
       if (window.top !== window.self) {
         //in iframe
         const header_div = document.querySelector('.header');
@@ -104,6 +105,7 @@
         if (!e.target.closest('#logged-in-user')) {
           const tooltips = document.querySelectorAll('.tooltip-container');
           tooltips.forEach(el => (el.innerHTML = ''));
+
         }
       });
     </script>
