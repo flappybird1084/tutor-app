@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/flappybird1084/tutor-app#readme",
   "dependencies": {
+    "child-process": "^1.0.2",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",

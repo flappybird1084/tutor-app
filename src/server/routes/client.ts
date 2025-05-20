@@ -1,9 +1,7 @@
 // src/server/routes/auth.ts
-import express, { RequestHandler, Request, Response } from 'express';
+import express, { Request, response, Response } from 'express';
 import dotenv from 'dotenv';
-import jwt, { JwtPayload, JwtHeader, Secret, SignOptions } from 'jsonwebtoken';
-import { hashPassword, verifyPassword } from '@server/util';
-import { User } from '@server/schemas';
+import { User, Assignment } from '@server/schemas';
 
 export const clientRouter = express.Router();
 dotenv.config();
@@ -83,6 +81,34 @@ clientRouter.post('/profile/edit', async (req: Request, res: Response) => {
     }
   }
 });
+
+clientRouter.delete('/profile/delete', async (req: Request, res: Response) => {
+  const { username } = req.body;
+
+  try {
+    const userObject = await User.findById(req.user.sub);
+    if (userObject) {
+      console.log(`about to delete username: ${username}`);
+      await userObject.deleteOne();
+      console.log(`Deleted user ${username}`);
+      res.redirect('/');
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (err: any) {
+    if (
+      err.code === 11000 &&
+      (err.keyPattern?.username || err.keyPattern?.email)
+    ) {
+      // Duplicate key error on username or email
+      res.redirect('/profile?error=userOrEmailExists');
+    } else {
+      console.error('Error updating profile:', err);
+      res.status(500).send('Internal server error');
+    }
+  }
+});
+
 clientRouter.get('/studentpage', async (req: Request, res: Response) => {
   if (req.user) {
     // console.log('User is authenticated:', req.user);
@@ -90,7 +116,17 @@ clientRouter.get('/studentpage', async (req: Request, res: Response) => {
     const email = userObject?.email;
     const username = userObject?.username;
     const role = userObject?.role;
-    res.render('client/studentpage', { user: req.user, email, username, role });
+    const assignments = await Assignment.find({
+      type: 'assigned',
+      user: userObject,
+    });
+    res.render('client/studentpage', {
+      user: req.user,
+      email,
+      username,
+      role,
+      assignments,
+    });
   } else {
     res.redirect('/auth/login');
   }

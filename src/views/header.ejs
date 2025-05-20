@@ -17,6 +17,12 @@
         color: #333;
       }
 
+      @media (prefers-color-scheme: dark) {
+        h1 {
+          color: white;
+        }
+      }
+
       a {
         color: #007bff;
         text-decoration: none;
@@ -88,11 +94,18 @@
     </div>
 
     <script>
+
+      if (window.top !== window.self) {
+        //in iframe
+        const header_div = document.querySelector('.header');
+        header_div.style.display = 'none';
+      }
       // Close tooltip when clicking anywhere else
-      document.body.addEventListener('click', function(e) {
-        if (!e.target.closest('#logged-in-user') {
+      document.body.addEventListener('click', function (e) {
+        if (!e.target.closest('#logged-in-user')) {
           const tooltips = document.querySelectorAll('.tooltip-container');
-          tooltips.forEach(el => el.innerHTML = '');
+          tooltips.forEach(el => (el.innerHTML = ''));
+
         }
       });
     </script>

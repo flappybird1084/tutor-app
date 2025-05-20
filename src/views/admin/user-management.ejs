@@ -2,19 +2,23 @@
 <h1>User Management</h1>
 <table border="1">
   <tr>
-    <th>ID</th>
+    <th>Actions</th>
     <th>Email</th>
     <th>Username</th>
     <th>Role</th>
     <th style="text-align: left">Password Hash</th>
+    <th>ID</th>
   </tr>
   <% users.forEach(user => { %>
   <tr>
-    <td><%= user._id %></td>
+    <td>
+      <a href="/admin/assign/<%= user._id %>">Assign</a>
+    </td>
     <td><%= user.email %></td>
     <td><%= user.username %></td>
     <td><%= user.role %></td>
     <td><%=user.password_hash%></td>
+    <td><%= user._id %></td>
   </tr>
   <% }); %>
 </table>

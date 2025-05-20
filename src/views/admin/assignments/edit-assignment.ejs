@@ -21,3 +21,13 @@
 
   <input type="submit" value="Save Changes" />
 </form>
+<script>
+  document.querySelector('form').addEventListener('submit', function () {
+    // Use a short timeout to allow the form to be processed normally first,
+    // especially if it's not AJAX-based
+    setTimeout(() => {
+      console.log('Form submitted, closing iframe...');
+      window.parent.postMessage('close-iframe', '*');
+    }, 300);
+  });
+</script>

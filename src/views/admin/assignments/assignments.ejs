@@ -8,11 +8,12 @@
   <table border="1">
     <tr>
       <th>Action</th>
-      <th>ID</th>
       <th>Title</th>
       <th>Description</th>
       <th>Github Link</th>
+      <th>Assignment Link</th>
       <th>Due Date</th>
+      <th>Id</th>
     </tr>
     <% assignments.forEach(assignment=> { %>
     <tr>
@@ -23,13 +24,18 @@
           Delete
         </a>
       </td>
-      <td><%= assignment._id %></td>
       <td><%= assignment.title %></td>
       <td><%= assignment.description %></td>
       <td>
         <a href="<%= assignment.github_link %>"><%= assignment.githubLink %></a>
       </td>
+      <td>
+        <a href="<%= assignment.assignment_link %>">
+          <%= assignment.assignmentLink %>
+        </a>
+      </td>
       <td><%= assignment.due_date %></td>
+      <td><%= assignment._id %></td>
     </tr>
     <% }); %>
   </table>
