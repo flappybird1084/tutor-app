@@ -18,7 +18,7 @@ export const User = mongoose.model(
 export const Assignment = mongoose.model(
   'Assignment',
   new Schema({
-    title: { type: String, unique: true },
+    title: { type: String },
     description: String,
     assignmentLink: String,
     githubLink: String,

@@ -81,6 +81,63 @@ gitbucketAPIRouter.post(
   }
 );
 
+gitbucketAPIRouter.delete(
+  '/repo/:repoName/:repoOwner/:username/:password',
+  async (req: Request, res: Response) => {
+    console.log(
+      `received request for repo delete with params: ${JSON.stringify(req.params)}`
+    );
+
+    try {
+      ///create-repo.sh http://100.64.0.25:8081/git/test/2test.git test test http://100.64.0.25:8081/api/v3 2test3
+      const githubCloneUrl = `${process.env.GITBUCKET_CLONE_URL}/git/${req.params.repoOwner}/${req.params.repoName}.git`;
+      console.log(`githubCloneUrl: ${githubCloneUrl}`);
+
+      const endpoint: string = process.env.GITBUCKET_URL!;
+      console.log(
+        `spawming bash command src/scripts/delete-repo.sh ${githubCloneUrl} ${req.params.username} ${req.params.password} ${endpoint} ${req.params.newName}`
+      );
+      const createProcess = spawn('bash', [
+        'src/scripts/delete-repo.sh',
+        githubCloneUrl,
+        req.params.username,
+        req.params.password,
+        endpoint,
+        req.params.repoName,
+      ]);
+      createProcess.stdout.on('data', data => {
+        console.log(`stdout: ${data}`);
+      });
+      createProcess.stderr.on('data', data => {
+        console.error(`stderr: ${data}`);
+      });
+      createProcess.on('close', code => {
+        if (code === 0) {
+          res.json({ message: 'Repository deleted successfully' });
+        } else {
+          res.status(500).json({ error: 'Failed to create repository' });
+        }
+      });
+    } catch (err) {
+      console.error('Error spawning bash:', err);
+      res.status(500).json({ error: 'Failed to spawn bash' });
+    }
+  }
+);
+// gitbucketAPIRouter.delete("/repos/:owner/:repo", async (req: Request, res: Response) => {
+//   const owner = req.params.owner;
+//   const repo = req.params.repo;
+//   console.log(`Request received: DELETE /repos/${owner}/${repo}`);
+//   await octokit.request(
+//     'DELETE /repos/{owner}/{repo}',
+//     {
+//       owner:owner,
+//       repo:repo,
+//     }
+//   );
+//   res.json({ message: 'Repository deleted successfully' });
+// });
+
 //not working :(
 gitbucketAPIRouter.get(
   '/:username/authorizations',
@@ -112,12 +169,10 @@ gitbucketAPIRouter.post(
       templateowner + templatename + newowner + newname
     );
     if (!isSafe) {
-      res
-        .status(400)
-        .json({
-          error:
-            'Invalid repository name or owner. We suspect it may contain malicious shell content',
-        });
+      res.status(400).json({
+        error:
+          'Invalid repository name or owner. We suspect it may contain malicious shell content',
+      });
       return;
     }
 

@@ -69,45 +69,87 @@
     <div class="header">
       <div class="left">
         <a href="/">Home</a>
+
         <% if (user) { %>
+
         <a href="/studentpage" style="margin-left: 30px">Student Page</a>
+
         <% if (user.role === 'admin') { %>
+
         <a href="/admin/mainpage" style="margin-left: 30px">Admin Page</a>
+
         <% } %> <% } %>
       </div>
+
       <div class="control">
         <a href="/auth/login">Login</a>
+
         <a href="/auth/register">Register</a>
+
         <% if(user) { %>
-        <p
-          id="logged-in-user"
-          hx-get="/profile/tooltip"
-          hx-target="next .tooltip-container"
-          hx-swap="innerHTML"
-          hx-trigger="click"
-        >
-          Welcome, <%= user.username %>
-        </p>
-        <div class="tooltip-container"></div>
+
+        <p id="logged-in-user" tabindex="0">Welcome, <%= user.username %></p>
+
         <% } %>
       </div>
     </div>
+  </body>
 
-    <script>
+  <script>
+    const loggedinuser = document.getElementById('logged-in-user');
 
-      if (window.top !== window.self) {
-        //in iframe
-        const header_div = document.querySelector('.header');
-        header_div.style.display = 'none';
-      }
-      // Close tooltip when clicking anywhere else
-      document.body.addEventListener('click', function (e) {
-        if (!e.target.closest('#logged-in-user')) {
-          const tooltips = document.querySelectorAll('.tooltip-container');
-          tooltips.forEach(el => (el.innerHTML = ''));
+    if (loggedinuser) {
+      loggedinuser.addEventListener('click', function (e) {
+        e.stopPropagation(); // Prevents event bubbling to body
 
+        // Remove existing tooltips
+
+        const existing = document.querySelectorAll('.tooltip');
+
+        existing.forEach(el => el.remove());
+
+        const newDiv = document.createElement('div');
+
+        //profile not yet implemented
+
+        newDiv.innerHTML = `
+
+
+      <a href="/profile">Profile</a><br>
+
+
+      <a href="/auth/signout">Log out</a>`;
+
+        newDiv.style.position = 'absolute';
+
+        newDiv.classList.add('tooltip');
+
+        const controlDiv = document.querySelector('.control');
+
+        controlDiv.appendChild(newDiv);
+      });
+
+      document.body.addEventListener('click', function () {
+        const tooltips = document.getElementsByClassName('tooltip');
+
+        while (tooltips.length > 0) {
+          tooltips[0].remove();
         }
       });
-    </script>
-  </body>
+
+      // Prevent tooltip click from bubbling
+
+      document.addEventListener(
+        'click',
+
+        function (e) {
+          if (e.target.closest('.tooltip')) {
+            e.stopPropagation();
+          }
+        },
+
+        true
+      );
+    }
+  </script>
 </html>

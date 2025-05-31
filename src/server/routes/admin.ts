@@ -126,6 +126,7 @@ adminRouter.get(
   async (req: Request, res: Response) => {
     const searchTerm = req.query.q;
     console.log('/assignments/search: found search term', searchTerm);
+    const userObject = await User.findById(req.params.userId);
     const assignments = await Assignment.find({
       title: { $regex: searchTerm as string, $options: 'i' },
       type: 'template',
@@ -166,7 +167,7 @@ adminRouter.post(
         return;
       }
       await Assignment.create({
-        title: templateAssignment.title + ' - assigned',
+        title: templateAssignment.title + ' (assigned, ' + user.username + ')',
         description: templateAssignment.description,
         githubLink: templateAssignment.githubLink,
         dueDate: templateAssignment.dueDate,
